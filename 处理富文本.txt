@@ -1,0 +1,13 @@
+2016年11月17日18:20:41
+
+
+两个功能真的很强大
+htmlspecialchars()
+
+htmlspecialchars_decode()
+
+
+2  用正则过滤掉一些标签
+
+
+3 strip_tags
