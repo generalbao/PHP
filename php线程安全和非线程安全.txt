@@ -1,0 +1,16 @@
+2016年11月26日20:34:24
+
+windows  iis  thread safe
+linux 
+
+cgi        ts
+FastCgi  nts
+
+
+PHP所推出的Thread Safe主要针对的是Windows下以IIS来运行PHP的情况，因为Windows中频繁申请进程开销较大，所以在Windows中要以多线程方式来
+运转PHP，这时候就需要Thread Safe版本。
+而在Linux系统下，PHP绝大多数情况下都以多进程方式运行，所以直接使用None Thread Safe即可。
+
+
+如果是使用ISAPI的方式来运行PHP就必须用Thread Safe(线程安全)的版本；
+而用FastCGI模式运行PHP的话就没有必要用线程安全检查了，用None Thread Safe(NTS，非线程安全)的版本能够更好的提高效率。
