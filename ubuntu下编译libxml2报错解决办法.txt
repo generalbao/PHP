@@ -1,0 +1,4 @@
+2016年11月27日00:22:36
+ubuntu下编译libxml2时，报错. 可能python版本过低。。
+
+执行apt-get install Python-dev即可
