@@ -1,0 +1,283 @@
+2016年11月26日23:41:20
+
+本人用的是 ubuntu 32位
+
+首先 安装g++ !!!
+sudo apt-get install g++
+
+所有源程序放在 /usr/local/src
+所有程序编译安装到 /usr/local/lnmp
+
+第一部分：安装Nginx
+
+安装Nginx前需要安装依赖库PCRE库、zlib库、SSL库
+
+安装PCRE库——为了rewrite
+
+sudo wget xxx
+tar –zxvf pcre-8.21.tar.gz
+
+cd pcre-8.21
+
+./configure --prefix=/usr/local/pcre-8.21
+
+make
+
+make install
+
+ 
+
+安装zlib库——为了gzip压缩
+
+zlib下载地址-----自己百度去
+tar –zxvf zlib-1.2.8.tar.gz
+
+cd zlib-1.2.8
+
+./configure --prefix=/usr/local/zlib-1.2.8
+
+make
+
+make install
+
+ 
+
+安装ssl库——支持ssl加密
+
+openssl下载地址-----
+tar -zxvf openssl-1.0.1c.tar.gz
+
+cd openssl-1.0.1c
+
+./config --prefix=/usr/local/openssl-1.0.1
+
+make
+
+make install
+
+ 
+
+安装nginx——服务器软件
+
+nginx下载地址
+tar -zxvf nginx-1.2.8.tar.gz
+
+cd nginx-1.2.8  
+
+./configure --prefix=/usr/local/nginx-1.2.8 \
+
+--with-pcre=../pcre-8.21/ \
+
+--with-zlib=../zlib-1.2.8/
+
+make
+
+make install
+
+ 
+
+设定nginx启动的配置文件
+
+/usr/local/nginx-1.2.8/sbin# ./nginx -c /usr/local/nginx-1.2.8/conf/nginx.conf
+
+/usr/local/nginx-1.2.8/sbin# ./nginx -s reload
+
+查看nginx进程
+
+ps –ef|grep nginx
+
+
+打开localhost
+
+看到 welcome to nginx 说明成功了
+
+
+第二部分：安装php以及mysql、redis扩展模块
+安装ncurses——安装mysql前置条件：
+
+ncurses下载地址
+tar -zxvf ncurses-5.4.tar.gz
+
+cd ncurses-5.4
+
+./configure
+
+make
+
+make install
+安装mysql——此处使用是源码包编译安装
+
+mysql下载地址
+tar -zxvf mysql-5.1.73.tar.gz
+
+cd mysql-5.1.73
+
+./configure --prefix=/usr/local/mysql-5.1.73
+
+make
+
+make install
+
+ 
+
+安装curl库——用于curl请求
+
+curl库下载地址
+tar -zxvf curl-7.39.0.tar.gz
+
+./configure --prefix=/usr/local/curl-7.39.0
+
+make
+
+make install
+
+ 
+
+安装libxml2库——用于xml解析
+libxml2下载地址
+libxml2-devel下载地址
+tar –xjf libxml2-2.6.23.tar.bz
+
+cd libxml2-2.6.23
+
+./configure
+
+make
+
+make install
+
+rpm –ivh libxml2-devel-2.6.23-1.i386.rpm 
+
+
+
+安装php
+
+php下载地址
+
+tar -zxvf php-5.2.14.tar.gz
+
+gunzip php-5.2.14-fpm-0.5.14.diff.gz
+
+patch -d php-5.2.14 -p1 < php-5.2.14-fpm-0.5.14.diff
+
+cd php-5.2.14
+
+./configure --prefix=/usr/local/php-5.2.14\
+
+--enable-fastcgi \
+
+--enable-fpm \
+
+--enable-sockets \
+
+--enable-mbstring \
+
+--with-mysql=/usr/local/mysql-5.1.73 \
+
+--with-mysqli=/usr/local/mysql-5.1.73/bin/mysql_config\
+
+--with-pdo-mysql=/usr/local/mysql-5.1.73 \
+
+--with-curl=/usr/local/curl-7.39.0 \
+
+--with-openssl=/usr/local/openssl-1.0.1 \
+
+--with-libxml2
+
+
+make
+
+make install
+
+ 
+
+启动php-fpm使用如下命令：
+
+/usr/local/php-5.2.14/sbin# ./php-fpm start
+
+启动php-fpm的时候出现
+Startingphp_fpm Dec 29 15:27:32.502790 [ERROR] fpm_unix_conf_wp(), line 124: pleasespecify user and group other than root, pool 'default'
+
+解决办法：进入目录：/usr/local/php-5.2.14/etc只需要修改php-fpm.conf
+
+         Unix user of processes
+ <!--    <value name="user">nobody</value>   -->
+
+         Unix group of processes
+ <!--    <value name="group">nobody</value>   -->
+
+将<!––>去掉即可。至于user/group根据实际情况修改（www）。
+重新启动 /usr/local/php-5.2.14/sbin# ./php-fpm restart 成功了
+
+
+第三部分：配置nginx虚拟主机
+
+新建虚拟主机配置文件目录
+
+/usr/local/nginx-1.2.8# mkdir vhosts
+
+cd vhosts
+
+touch scott.qq.com.conf
+
+vim scottshi.qq.com.conf
+
+输入以下内容配置自定义虚拟主机：
+
+server {
+
+listen 8001;/*监听端口号*/
+
+server_name scott.qq.com;/*域名*/
+
+access_log/usr/local/nginxweb/htdocs/access.log;/*站点访问日志*/
+
+location / {
+
+root /usr/local/nginxweb/htdocs/;/*页面文件目录*/
+
+index index.php index.html index.htm;
+
+}
+
+error_page 500 502 503 504 /50x.html;/*服务器错误页面*/
+
+location = /50x.html {
+
+root html;
+
+}
+
+# pass the PHP scripts to FastCGI serverlistening on 127.0.0.1:9000
+
+location ~ \.php$ {
+
+fastcgi_pass 127.0.0.1:9000; /*Nginx转发请求地址*/
+
+fastcgi_index index.php;
+
+fastcgi_param SCRIPT_FILENAME/usr/local/nginxweb/htdocs/$fastcgi_script_name;
+
+include fastcgi_params;
+
+}
+
+location ~ /\.ht {
+
+deny all;
+
+}
+
+}
+
+保存退出后，进入nginx的配置文件nginx.conf
+
+/usr/local/nginx-1.2.8/conf# vim nginx.conf
+
+与默认server层级并列且位于http层级之内，添加如下内容，使得自定义虚拟主机生效：
+
+include /usr/local/nginx-1.2.8/vhosts/*;
+
+保存退出后，重启nginx服务器，重新载入配置文件，使用命令如下：
+
+/usr/local/nginx-1.2.8/sbin# ./ngin
