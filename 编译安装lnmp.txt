@@ -80,7 +80,7 @@ make install
 
 /usr/local/nginx-1.2.8/sbin# ./nginx -c /usr/local/nginx-1.2.8/conf/nginx.conf
 
-/usr/local/nginx-1.2.8/sbin# ./nginx -s reload
+/usr/local/nginx-1.2.8/sbin# ./nginx -s reload 重启
 
 查看nginx进程
 
@@ -89,7 +89,8 @@ ps –ef|grep nginx
 
 打开localhost
 
-看到 welcome to nginx 说明成功了
+看到 welcome to nginx 说明成功了  如果启动不了，很可能是本机之前安装了apache 80端口冲突了，换端口即可
+
 
 
 第二部分：安装php以及mysql、redis扩展模块
@@ -248,7 +249,9 @@ root html;
 
 }
 
-# pass the PHP scripts to FastCGI serverlistening on 127.0.0.1:9000
+
+# nginx收到php解析时转发给php-fpm
+# pass the PHP scripts to FastCGI serverlistening on 127.0.0.1:9000       ！！！！！！！！！！
 
 location ~ \.php$ {
 
@@ -256,7 +259,7 @@ fastcgi_pass 127.0.0.1:9000; /*Nginx转发请求地址*/
 
 fastcgi_index index.php;
 
-fastcgi_param SCRIPT_FILENAME/usr/local/nginxweb/htdocs/$fastcgi_script_name;
+fastcgi_param SCRIPT_FILENAME/usr/local/nginxweb/htdocs/$fastcgi_script_name;           ！！！！配置网站更目录
 
 include fastcgi_params;
 
