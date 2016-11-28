@@ -1,0 +1,20 @@
+2016年11月28日22:52:56
+
+你php7安装源码的路径里面有个ext的目录
+/root/tools/php-7.0.11/ext 
+
+
+
+//里面的，你想扩展安装那个就是安装那个。先搞pdo_mysql
+cd pdo_mysql //进去
+
+//里面没有configure 的文件。就用phpize来扩展模块
+/usr/local/php/bin/phpize //看看有没有comfigure
+
+yum install autoconf -y //autoconf是一个用于生成可以自动的配置软件源代码包以适应多种UNIX系统的shell脚本的工具
+
+./configure --with-php-config=/usr/local/php/bin/php-config --with-pdo-mysql=/usr/local/mysql //有configure之后，写这个进去，这个是mysql安装在/usr/local/mysql的。
+make && make install
+
+echo 'extension="pdo_mysql.so"' >> /usr/local/php/lib/php.ini
+//之后就是php -m ，看看有没有pdo_mysql
