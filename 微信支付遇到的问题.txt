@@ -1,0 +1,10 @@
+2016年12月1日14:47:58
+
+111 扫描支付模式二 设置notify_url,回调地址,
+在example下面的native.php文件下 WxPayUnifiedOrder 类的SetNotify_url方法
+WxPayUnifiedOrder->setNotify_url                ----demo写的是微信  http://paysdk.weixin.qq.com/example/notify.php 要改！！！！！
+
+文档请看 https://pay.weixin.qq.com/wiki/doc/api/native.php?chapter=9_1
+222 回调地址必须能在url访问正常,否则微信会一直回调8次    ！！！！
+333 金额是以分为单位  必须大于 1 
+444 必须填写 out_trade_no
