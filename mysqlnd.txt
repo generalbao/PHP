@@ -1,0 +1,30 @@
+2016年12月4日11:21:35
+
+mysqlnd库，用来访问MySQL数据库，大大提升了PHP的数据库访问性能。
+我们知道，PHP访问MySQL数据库，是通过MySQL数据库的libmysql client库，这个libmysql client是用C/C++编写的，
+虽然一直以来PHP通过libmysql访问数据库性能也一直很好，但是却无法利用PHP本身的很多特性。
+
+mysqlnd提供了和Zend引擎高度的集成性，更加快速的执行速度，更少的内存消耗，利用了PHP的Stream API，以及客户端缓存机制。
+由于mysqlnd是透过Zend引擎，因此提供更多高级特性，以及有效利用Zend进行加速。
+
+从下图可以看出来，libmysql是直接访问数据库的，而mysqlnd是通过Zend访问数据库。
+
+
+MySQLnd成为php 5.4中的默认mysql驱动，它有如下优点：
+1、mysqlnd更容易编译； 因为它是php源码树的一个组成部分
+2、mysqlnd和php内部机制结合更紧密，是优化过的mysql驱动
+3、mysqlnd更节省内存，从测试结果来看，比传统的mysql扩展节省40%的内存
+4、mysqlnd更快
+5、mysqlnd提供了丰富的性能统计功能
+6、mysqlnd使用了PHP license以避免不必要的版权纠纷
+这个改动应同时对mysqli和pdo_mysql扩展生效。
+
+mysqlnd库是高度优化和紧密集成到PHP，使用PHP内部C基础设施的无缝集成。全新开发的新驱动，抛弃了原来的用c语言做的外挂在php上的独立模块。
+mysqlnd 直接使用php内部的变量管理，查询结果直接进入php，原来是在c模块中另外开辟内存空间，然后再一条一条fetch出来。
+
+编译方法
+cd php-7
+./configure --with-mysql=mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd 加上你的参数
+make
+make install
+php 5.4及以上编译时可以不加mysqlnd 默认即为mysqlnd。
