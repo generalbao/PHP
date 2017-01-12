@@ -1,0 +1,18 @@
+2017年1月12日14:03:09
+
+
+
+如果”最后的修改时间”到”现在”超过了gc_maxlifetime（默认是1440）秒，这个session文件就被认为是过期了，在下一次session回收的时候，如果这个文件仍然没有
+被更改过，这个session文件就会被删除（session就过期了）。
+简单的说，如果我登录到某网站，如果在1440秒（默认值）内没有操作过，那么对应的session就认为是过期了。
+
+所以，修改php.ini文件中的gc_maxlifetime变量就可以延长session的过期时间了：（例如，我们把过期时间修改为86400秒）
+
+session.gc_maxlifetime = 86400
+然后，重启你的web服务（一般是apache）就可以了。
+
+注意：php5里面session过期使用了回收机制。这里设置时间为86400秒，如果session在86400秒内没有被修改过，那么在下一次“回收”时才真的被删除。
+ 过期后有 百分之一的概率会被删除
+#概率是 gc_probability/gc_divisor
+session.gc_probability = 1
+session.gc_divisor = 100
