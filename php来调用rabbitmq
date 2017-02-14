@@ -1,0 +1,77 @@
+2017年2月14日15:20:04
+
+但是想用php来调用rabbitmq可是没那么简单了,整整搞了一个下午才搞定....
+
+主要是两个包
+
+1.rabbitmq-c的包
+
+2.amqp的包
+
+下载
+
+首先是rabbitmq-c-0.4.1.tar.gz包,可以访问https://github.com/alanxz/rabbitmq-c去下载最新的
+
+wget https://github.com/alanxz/rabbitmq-c/releases/download/v0.4.1/rabbitmq-c-0.4.1.tar.gz
+
+然后下载amqp-1.2.0.tgz,也可以去下载最新的http://pecl.php.net/package/amqp
+
+wget http://pecl.php.net/get/amqp-1.2.0.tgz
+
+安装
+aaaaaaaaaaaaa
+现在开始进行关键的操作了,在网上找的方法很多都有问题,这是我的安装和配置方法,你可以借鉴一下,但是不能保证每台机器都能够正确的安装哦~
+
+先把两个包全都解压
+
+tar zxvf rabbitmq-c-0.4.1.tar.gztar zxvf amqp-1.2.0.tgz
+
+两个是有先后顺序的哦~
+cd rabbitmqxx
+autoreconf -i
+
+  报错  
+  111 
+  aclocal no found 解决--- yum install automake
+  2222 
+Makefile.am:10: error: Libtool library used but 'LIBTOOL' is undefined
+Makefile.am:10:   The usual way to define 'LIBTOOL' is to add 'LT_INIT'
+Makefile.am:10:   to 'configure.ac' and run 'aclocal' and 'autoconf' again.
+Makefile.am:10:   If 'LT_INIT' is in 'configure.ac', make sure
+Makefile.am:10:   its definition is in aclocal's search path.
+解决  yum install libtool
+
+./configure --prefix=/usr/local/rabbitmq-c-0.4.1
+ make && make install
+ 
+ bbbbbbbbbbb
+ 
+  安装amqp-1.2.0
+
+cd amqp-1.2.0
+phpize
+
+执行完phpize命令后你应该看到类似下边的内容
+
+Configuring for:PHP Api Version: 20100412Zend Module Api No: 20100525Zend Extension Api No: 220100525
+
+要是没有这个命令的话 可能需要自己查找一下啦~~~
+
+find / -name phpize
+
+以上这两步是没有phpize这个命令的才需要执行哦~~~
+
+然后是configure,这个要根据你个人环境自己修改内容,这里展示的是我的
+
+./configure --with-php-config=/usr/bin/php-config --with-amqp --with-librabbitmq-dir=/usr/local/rabbitmq-c-0.4.1/
+
+PS:这里解释一下
+
+--with-php-config=/usr/bin/php-config 这个php-config根据你装的php而定,要是找不到请用find / -name php-config查找
+--with-librabbitmq-dir=/usr/local/rabbitmq-c-0.4.1/ 这个是指定你安装的rabbitmq-c的目录,我安装的是
+/usr/local/rabbitmq-c-0.4.1/因为在安装rabbitmq-c的时候我自己指定了安装目录了.
+
+然后进行make和安装了
+
+make && make install
+ 
