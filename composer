@@ -1,0 +1,7 @@
+2017年2月14日14:43:49
+
+Composer是PHP中用来管理依赖（dependency）关系的工具。你可以在自己的项目中声明所依赖的外部工具库（libraries），Composer会帮你安装这些依赖的库文件
+
+curl -sS https://getcomposer.org/installer | php        // php必须配置环境变量  ====》 把 php安装目录下 xxxx/bin/php 复制一份到　/usr/bin/php
+mv composer.phar /usr/bin/composer         //这样你就可以在哪都可以composer 全局变量！
+composer -V
