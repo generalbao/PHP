@@ -1,0 +1,24 @@
+2017年2月14日13:48:31
+ 在php第一次编译的时候没有编译openssl，所以得动态编译
+ 
+ cd /usr/local/src/php5/ 是php5的源代码
+ 
+ cd ext
+ 
+ cd openssl
+ 执行
+1 /usr/local/php5/bin/phpize  
+ Cannot find config.m4. 
+Make sure that you run '/usr/local/bin/phpize' in the top level source directory of the module
+ 因为改目录下只有 config0.m4没有config.m4,所以
+ mv config0.m4 config.m4
+ 重新执行 /usr/local/php5/bin/phpize 
+ 
+ 2 编译：
+./configure --with-openssl --with-php-config=/usr/local/php/bin/php-config
+
+
+3 如果报找不到 openssl
+ 就 yum install openssl openssl-devel
+ 
+make;make install
