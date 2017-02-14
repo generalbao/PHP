@@ -1,3 +1,2 @@
 2016年11月28日23:58:13
-搞死我了，
-一定会找到原因的 加油，fighting!!!
+yum install openssl openssl-devel
