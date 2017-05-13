@@ -1,0 +1,5 @@
+Namespace declaration statement has to be the very first statement or after
+
+解决措施
+notepad++把页面转为utp-8无dom格式就好了
+notepad++ 点击菜单编码==》以utf-8 无BOM格式编码
